@@ -1,39 +1,89 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Customizable Chatbot Powered by OpenAI GPT
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+A Flutter package for integrating a customizable chatbot powered by OpenAI's GPT API. This package allows you to create personalized conversational experiences by configuring various settings or using the default GPT-3.5-turbo model.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Customizable API Integration with OpenAI GPT.
+- Default support for the GPT-3.5-turbo model.
+- Ability to use your own API service.
+- Dynamic configuration options such as model, messages, and token limits.
 
-## Getting started
+## Getting Started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+### Requirements
 
-## Usage
+- **Flutter**: 3.22.1
+- **Dart**: 3.4.1
+- **DevTools**: 2.34.3
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Ensure you have the correct version of Flutter installed:
 
-```dart
-const like = 'sample';
+```sh
+flutter --version
 ```
 
-## Additional information
+# Installation
+```sh
+dependencies:
+  your_chatbot_package: ^1.0.0
+```
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+# Usage
+```sh
+import 'package:your_chatbot_package/your_chatbot_package.dart';
+
+final chatBot = ChatBot(
+  apiKey: 'your-api-key-here',
+);
+
+final response = await chatBot.sendMessage(
+  message: 'Hello, how can I help you?',
+);
+
+print(response.content);
+```
+
+# Custom Configuration
+
+```sh
+final chatBot = ChatBot(
+  apiKey: 'your-api-key-here',
+  model: 'gpt-3.5-turbo',
+  maxTokens: 150,
+);
+
+final response = await chatBot.sendMessage(
+  message: 'What is the weather like today?',
+);
+
+print(response.content);
+```
+
+# Using Your Own API Service
+
+```sh
+final chatBot = ChatBot(
+  apiKey: 'your-api-key-here',
+  apiUrl: 'https://your-custom-api.com/v1/chat',
+);
+
+final response = await chatBot.sendMessage(
+  message: 'Tell me a joke!',
+);
+
+print(response.content);
+```
+
+# License
+
+This project is licensed under the GNU License. See the LICENSE file for details.
+
+# Contributing
+
+Contributions are welcome! Please submit a pull request or open an issue to discuss improvements or report bugs.
+
+# Acknowledgments
+
+Thanks to OpenAI for providing the GPT API.
+Special thanks to the Flutter community for their ongoing support.

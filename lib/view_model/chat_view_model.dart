@@ -9,7 +9,7 @@ class ChatViewModel extends ChangeNotifier {
   final Dio _dio = Dio();
   final String _baseUrl = "https://api.openai.com/v1/chat/completions";
   bool isLoading = false;
-  List<ChatMessageModel> _messages = [];
+  final List<ChatMessageModel> _messages = [];
   List<ChatMessageModel> get messages => _messages;
 
   Future<void> chatWithSupport(String message, String apikey) async {
