@@ -1,4 +1,3 @@
-import 'package:chat_bot/model/chat_model.dart';
 import 'package:chat_bot/view/views/chat_bubble.dart';
 import 'package:chat_bot/view/views/chat_input_field.dart';
 import 'package:chat_bot/controllers/chat_controller.dart';
@@ -6,16 +5,33 @@ import 'package:chat_bot/view/views/typing_indicator.dart';
 import 'package:flutter/material.dart';
 
 class ChatBot extends StatefulWidget {
-  const ChatBot({super.key, required this.chatController});
+  const ChatBot(
+      {super.key,
+      required this.chatController,
+      this.customTypeIndicator,
+      this.styleTextHourBubble,
+      this.styleSentByMeBubble,
+      this.styleReceivedByMeBubble,
+      this.styleInput});
+
   final ChatController chatController;
+
+  /// The widget that will be displayed when the user is typing.
+  /// For default behavior, set it to null.
+  final Widget? customTypeIndicator;
+
+  /// bubble style
+  final TextStyle? styleTextHourBubble;
+  final StyleSentByMe? styleSentByMeBubble;
+  final StyleReceivedByMe? styleReceivedByMeBubble;
+
+  final ChatInputStyle? styleInput;
 
   @override
   State<ChatBot> createState() => _ChatBotState();
 }
 
 class _ChatBotState extends State<ChatBot> {
-  final TextEditingController _textEditingController = TextEditingController();
-
   late final ChatController _chatController;
 
   @override
@@ -42,42 +58,27 @@ class _ChatBotState extends State<ChatBot> {
                     itemCount: messages.length + (isLoading ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (index == messages.length) {
-                        return const TypingIndicator();
+                        return widget.customTypeIndicator ??
+                            const TypingIndicator();
                       }
-                      return ChatBubble(message: messages[index]);
+                      return ChatBubble(
+                        message: messages[index],
+                        styleReceivedByMe: widget.styleReceivedByMeBubble,
+                        styleSentByMe: widget.styleSentByMeBubble,
+                        styleTextHour: widget.styleTextHourBubble,
+                      );
                     },
                   ),
                 );
               }),
           const Divider(height: 1),
           ChatInputField(
-            controller: _textEditingController,
-            onSend: _onSendMessage,
+            controller: _chatController.textEditingController,
+            onSend: _chatController.sendMessage,
+            style: widget.styleInput,
           ),
         ],
       ),
     );
   }
-
-  void _onSendMessage([String? messageDefault]) {
-    String message = messageDefault ?? _textEditingController.text;
-    if (message.isEmpty) return;
-    _chatController.messages.add(ChatMessageModel(
-      isSentByMe: true,
-      created: _chatController.getCurrentHour(),
-      choices: [
-        ChoiceModel(
-          message: MessageModel(
-            content: message,
-            role: "user",
-          ),
-        )
-      ],
-    ));
-    _chatController.scrollToEnd();
-    _chatController.sendMessage(message);
-    _textEditingController.clear();
-  }
-
-
 }

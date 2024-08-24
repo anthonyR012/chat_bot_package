@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:chat_bot/model/chat_model.dart';
+import 'package:chat_bot/util/format_data_util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -10,22 +11,45 @@ class ChatController extends ChangeNotifier {
   final ParamsChatBot _params;
   final String? _apiKey;
   final ScrollController scrollController;
+  final TextEditingController textEditingController;
   final Dio _dio = Dio();
+  final FormatDataUtil _formatDataUtil;
 
   ChatController({
+    TextEditingController? textEditingController,
+    FormatDataUtil? formatDataUtil,
     ScrollController? scrollController,
     ParamsChatBot params = const ParamsChatBot(),
     String? apiKey,
-  })  : scrollController = scrollController ?? ScrollController(),
+  })  : textEditingController =
+            textEditingController ?? TextEditingController(),
+        _formatDataUtil = formatDataUtil ?? FormatDataUtil(),
+        scrollController = scrollController ?? ScrollController(),
         _params = params,
         _apiKey = apiKey;
 
   List<ChatMessageModel> get messages => _messages;
 
-  Future<void> sendMessage(String message) async {
+  Future<void> sendMessage([String? messageDefault]) async {
     try {
+      String message = messageDefault ?? textEditingController.text;
+      if (message.isEmpty) return;
+      messages.add(ChatMessageModel(
+        isSentByMe: true,
+        created: _formatDataUtil.getCurrentHour(),
+        choices: [
+          ChoiceModel(
+            message: MessageModel(
+              content: message,
+              role: "user",
+            ),
+          )
+        ],
+      ));
+      textEditingController.clear();
       isLoading = true;
       notifyListeners();
+      scrollToEnd();
       final Options options = _params.options ??
           Options(headers: {
             HttpHeaders.authorizationHeader: 'Bearer $_apiKey',
@@ -47,15 +71,15 @@ class ChatController extends ChangeNotifier {
     }
     isLoading = false;
     notifyListeners();
-    scrollToEnd();
+    Future.delayed(Durations.medium4, scrollToEnd);
   }
 
-  // Handle different status codes
   void _handleResponse(Response response) {
     if (response.statusCode == 200) {
       ChatMessageModel chatMessage =
           chatMessageModelFromJson(jsonEncode(response.data));
-      chatMessage = chatMessage.copyWith(created: getCurrentHour());
+      chatMessage =
+          chatMessage.copyWith(created: _formatDataUtil.getCurrentHour());
       _messages.add(chatMessage);
     } else {
       ChatMessageModel chatMessage = ChatMessageModel(choices: [
@@ -69,7 +93,6 @@ class ChatController extends ChangeNotifier {
     }
   }
 
-  // Handle Dio-specific errors
   void _handleDioError(DioException e) {
     String errorMessage;
     if (e.type == DioExceptionType.connectionTimeout ||
@@ -115,15 +138,6 @@ class ChatController extends ChangeNotifier {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
-  }
-
-  String getCurrentHour() {
-    final now = DateTime.now();
-    final int currentHour = now.hour;
-    final int currentMinute = now.minute;
-    int hour12 = currentHour > 12 ? currentHour - 12 : currentHour;
-    String period = currentHour >= 12 ? 'PM' : 'AM';
-    return "$hour12:$currentMinute $period";
   }
 }
 
