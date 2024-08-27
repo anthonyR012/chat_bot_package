@@ -53,6 +53,7 @@ class _ChatBotState extends State<ChatBot> {
                 final messages = _chatController.messages;
                 return Expanded(
                   child: ListView.builder(
+                    key: const Key('chat_list_view'),
                     controller: _chatController.scrollController,
                     padding: const EdgeInsets.all(16.0),
                     itemCount: messages.length + (isLoading ? 1 : 0),
@@ -76,6 +77,7 @@ class _ChatBotState extends State<ChatBot> {
             controller: _chatController.textEditingController,
             onSend: _chatController.sendMessage,
             style: widget.styleInput,
+            key: const Key('chat_input_field'),
           ),
         ],
       ),

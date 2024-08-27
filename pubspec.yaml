@@ -1,6 +1,6 @@
 name: chat_bot
 description: "A customizable chatbot built on OpenAI's GPT API, enabling personalized conversational experiences."
-version: 1.0.1
+version: 1.0.2
 
 homepage: https://solid-clone-334117.firebaseapp.com/ 
 repository: https://github.com/anthonyR012/chat_bot_package 
@@ -19,6 +19,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  mockito: ^5.4.4
+  build_runner: ^2.4.12
 
 flutter:
 

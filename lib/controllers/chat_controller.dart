@@ -12,10 +12,11 @@ class ChatController extends ChangeNotifier {
   final String? _apiKey;
   final ScrollController scrollController;
   final TextEditingController textEditingController;
-  final Dio _dio = Dio();
+  final Dio _dio;
   final FormatDataUtil _formatDataUtil;
 
   ChatController({
+    Dio? dio,
     TextEditingController? textEditingController,
     FormatDataUtil? formatDataUtil,
     ScrollController? scrollController,
@@ -25,6 +26,7 @@ class ChatController extends ChangeNotifier {
             textEditingController ?? TextEditingController(),
         _formatDataUtil = formatDataUtil ?? FormatDataUtil(),
         scrollController = scrollController ?? ScrollController(),
+        _dio = dio ?? Dio(),
         _params = params,
         _apiKey = apiKey;
 
