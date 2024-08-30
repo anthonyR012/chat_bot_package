@@ -1,4 +1,5 @@
 class FormatDataUtil {
+  const FormatDataUtil();
   String getCurrentHour({DateTime? now}) {
     now = now ?? DateTime.now();
     final int currentHour = now.hour;

@@ -2,31 +2,26 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:chat_bot/controllers/chat_controller.dart';
 import 'package:chat_bot/model/chat_model.dart';
-import 'package:chat_bot/util/format_data_util.dart';
 import 'package:http/http.dart' as http;
 
-abstract class ApiDatasource {
+abstract class ChatBotDatasource {
   Future<ChatMessageModel> sendMessage({required String message});
 }
 
-class ApiDatasourceImpl implements ApiDatasource {
+class ApiDatasourceImpl implements ChatBotDatasource {
   final http.Client _http;
   final String _apiKey;
-  final String baseUrl;
-  final String modelGpt;
-  final FormatDataUtil formatDataUtil;
-  final int maxToken;
+  final ParamsChatBot _params;
 
   ApiDatasourceImpl({
     http.Client? httpClient,
+    required ParamsChatBot params,
     required String apiKey,
-    required this.baseUrl,
-    required this.modelGpt,
-    required this.formatDataUtil,
-    required this.maxToken,
   })  : _http = httpClient ?? http.Client(),
-        _apiKey = apiKey;
+        _apiKey = apiKey,
+        _params = params;
 
   @override
   Future<ChatMessageModel> sendMessage({required String message}) async {
@@ -36,13 +31,13 @@ class ApiDatasourceImpl implements ApiDatasource {
         HttpHeaders.authorizationHeader: 'Bearer $_apiKey',
         HttpHeaders.contentTypeHeader: 'application/json',
       };
-      var url = Uri.https(baseUrl);
+      var url = Uri.https(_params.baseUrl);
       var body = json.encode({
-        'model': modelGpt,
+        'model': _params.modelGpt,
         'messages': [
           {'role': 'user', 'content': message},
         ],
-        'max_tokens': maxToken,
+        'max_tokens': _params.maxToken,
       });
       var response = await _http
           .post(url, body: body, headers: headers)
@@ -65,7 +60,7 @@ class ApiDatasourceImpl implements ApiDatasource {
     if (response.statusCode == 200) {
       ChatMessageModel chatMessage = chatMessageModelFromJson(response.body);
       chatMessage =
-          chatMessage.copyWith(created: formatDataUtil.getCurrentHour());
+          chatMessage.copyWith(created: _params.formatDataUtil.getCurrentHour());
       return chatMessage;
     } else {
       return _handleHttpError(

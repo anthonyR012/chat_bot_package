@@ -25,11 +25,10 @@ void main() {
     chatController = ChatController(
       scrollController: mockScrollController,
       textEditingController: mockTextEditingController,
-      formatDataUtil: mockFormatDataUtil,
-      apiKey: "API_KEY",
-      apiDatasource: mockApiDatasource,
-      params: const ParamsChatBot(
+      datasource: mockApiDatasource,
+      params: ParamsChatBot(
         baseUrl: "example.com",
+        formatDataUtil: mockFormatDataUtil,
       ),
     );
   });

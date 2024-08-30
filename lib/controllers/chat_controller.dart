@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 
 class ChatController extends ChatControllerInterface<ChatMessageModel> {
   final List<ChatMessageModel> _messages = [];
-  final FormatDataUtil _formatDataUtil;
-  final ApiDatasource _apiDatasource;
+  final ChatBotDatasource _apiDatasource;
+  final ParamsChatBot _params;
 
   @override
   final TextEditingController textEditingController;
@@ -23,22 +23,22 @@ class ChatController extends ChatControllerInterface<ChatMessageModel> {
   ChatController({
     http.Client? httpClient,
     TextEditingController? textEditingController,
-    FormatDataUtil? formatDataUtil,
     ScrollController? scrollController,
-    ParamsChatBot params = const ParamsChatBot(),
-    required String apiKey,
-    ApiDatasource? apiDatasource,
-  })  : textEditingController =
+    ParamsChatBot? params,
+    String? apiKey,
+    ChatBotDatasource? datasource,
+  })  : assert(
+            (datasource != null && apiKey == null) ||
+                (datasource == null && apiKey != null),
+            "Either datasource or apiKey must be provided"),
+        _params = params ?? const ParamsChatBot(),
+        textEditingController =
             textEditingController ?? TextEditingController(),
-        _formatDataUtil = formatDataUtil ?? FormatDataUtil(),
         scrollController = scrollController ?? ScrollController(),
-        _apiDatasource = apiDatasource ??
+        _apiDatasource = datasource ??
             ApiDatasourceImpl(
-                apiKey: apiKey,
-                baseUrl: params.baseUrl,
-                formatDataUtil: FormatDataUtil(),
-                maxToken: params.maxToken,
-                modelGpt: params.modelGpt,
+                apiKey: apiKey!,
+                params: params ?? const ParamsChatBot(),
                 httpClient: httpClient);
 
   @override
@@ -51,7 +51,7 @@ class ChatController extends ChatControllerInterface<ChatMessageModel> {
       if (message.isEmpty) return;
       messages.add(ChatMessageModel(
         isSentByMe: true,
-        created: _formatDataUtil.getCurrentHour(),
+        created: _params.formatDataUtil.getCurrentHour(),
         choices: [
           ChoiceModel(
             message: MessageModel(
@@ -89,9 +89,12 @@ class ParamsChatBot {
   final String baseUrl;
   final String modelGpt;
   final int maxToken;
+  final FormatDataUtil formatDataUtil;
 
-  const ParamsChatBot(
-      {this.baseUrl = "api.openai.com/v1/chat/completions",
-      this.modelGpt = "gpt-3.5-turbo",
-      this.maxToken = 150});
+  const ParamsChatBot({
+    this.baseUrl = "api.openai.com/v1/chat/completions",
+    this.modelGpt = "gpt-3.5-turbo",
+    this.maxToken = 150,
+    this.formatDataUtil = const FormatDataUtil(),
+  });
 }

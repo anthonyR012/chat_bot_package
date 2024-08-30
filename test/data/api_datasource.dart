@@ -1,8 +1,7 @@
-
-
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:chat_bot/controllers/chat_controller.dart';
 import 'package:chat_bot/data/api_datasource.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -16,7 +15,6 @@ void main() {
   late MockTextEditingController mockTextEditingController;
   late MockFormatDataUtil mockFormatDataUtil;
 
-
   setUp(() {
     mockHttp = MockClient();
     mockResponse = MockResponse();
@@ -24,10 +22,12 @@ void main() {
     mockFormatDataUtil = MockFormatDataUtil();
     apiDatasource = ApiDatasourceImpl(
         apiKey: "API_KEY",
-        baseUrl: "example.com",
-        maxToken: 150,
-        modelGpt: "gpt-3.5-turbo",
-        formatDataUtil: mockFormatDataUtil,
+        params: ParamsChatBot(
+          baseUrl: "example.com",
+          maxToken: 150,
+          modelGpt: "gpt-3.5-turbo",
+          formatDataUtil: mockFormatDataUtil,
+        ),
         httpClient: mockHttp);
   });
 
