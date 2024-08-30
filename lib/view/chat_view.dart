@@ -1,6 +1,6 @@
+import 'package:chat_bot/controllers/interfaces/chat_controller_interface.dart';
 import 'package:chat_bot/view/views/chat_bubble.dart';
 import 'package:chat_bot/view/views/chat_input_field.dart';
-import 'package:chat_bot/controllers/chat_controller.dart';
 import 'package:chat_bot/view/views/typing_indicator.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,7 @@ class ChatBot extends StatefulWidget {
       this.styleReceivedByMeBubble,
       this.styleInput});
 
-  final ChatController chatController;
+  final ChatControllerInterface chatController;
 
   /// The widget that will be displayed when the user is typing.
   /// For default behavior, set it to null.
@@ -32,7 +32,7 @@ class ChatBot extends StatefulWidget {
 }
 
 class _ChatBotState extends State<ChatBot> {
-  late final ChatController _chatController;
+  late final ChatControllerInterface _chatController;
 
   @override
   void initState() {
