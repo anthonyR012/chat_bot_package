@@ -10,6 +10,8 @@ class ChatController extends ChatControllerInterface<MessageChat> {
   final List<MessageChat> _messages = [];
   final ChatBotDatasource _apiDatasource;
   final ParamsChatBot _params;
+  @override
+  final FocusNode focusNode;
 
   @override
   final TextEditingController textEditingController;
@@ -24,6 +26,7 @@ class ChatController extends ChatControllerInterface<MessageChat> {
     http.Client? httpClient,
     TextEditingController? textEditingController,
     ScrollController? scrollController,
+    FocusNode? focusNode,
     ParamsChatBot? params,
     String? apiKey,
     ChatBotDatasource? datasource,
@@ -32,6 +35,7 @@ class ChatController extends ChatControllerInterface<MessageChat> {
                 (datasource == null && apiKey != null),
             "Either datasource or apiKey must be provided"),
         _params = params ?? const ParamsChatBot(),
+        focusNode = focusNode ?? FocusNode(),
         textEditingController =
             textEditingController ?? TextEditingController(),
         scrollController = scrollController ?? ScrollController(),
@@ -77,6 +81,8 @@ class ChatController extends ChatControllerInterface<MessageChat> {
         role: "Error");
     _messages.add(chatMessage);
   }
+  
+
 }
 
 class ParamsChatBot {

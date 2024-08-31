@@ -7,6 +7,7 @@ abstract class ChatControllerInterface<ModelMessage> extends ChangeNotifier {
   ScrollController get scrollController;
   bool get isLoading;
   TextEditingController get textEditingController;
+  FocusNode get focusNode;
   Future<void> sendMessage([String? messageDefault]);
 
   void scrollToEnd() {

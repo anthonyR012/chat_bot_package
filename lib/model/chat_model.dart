@@ -88,7 +88,7 @@ class MessageChat {
 
   factory MessageChat.fromJson(Map<String, dynamic> json) => MessageChat(
         role: json["role"],
-        created: json["created"],
+        created: json["created"] ?? "",
         content: json["content"],
         isSentByMe: json["is_sent_by_me"] ?? false,
       );

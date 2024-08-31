@@ -73,9 +73,10 @@ class _ChatBotState extends State<ChatBot> {
                 );
               }),
           const Divider(height: 1),
-          ChatInputField(
+          ChatTextField(
             controller: _chatController.textEditingController,
             onSend: _chatController.sendMessage,
+            focus: _chatController.focusNode,
             style: widget.styleInput,
             key: const Key('chat_input_field'),
           ),
