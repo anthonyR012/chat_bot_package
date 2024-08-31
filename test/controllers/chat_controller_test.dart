@@ -1,4 +1,3 @@
-
 import 'package:chat_bot/controllers/chat_controller.dart';
 import 'package:chat_bot/model/chat_model.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,10 +13,10 @@ void main() {
   late MockTextEditingController mockTextEditingController;
   late MockFormatDataUtil mockFormatDataUtil;
   late MockScrollPosition mockScrollPosition;
-  late MockApiDatasource mockApiDatasource;
+  late MockChatBotDatasource mockApiDatasource;
 
   setUp(() {
-    mockApiDatasource = MockApiDatasource();
+    mockApiDatasource = MockChatBotDatasource();
     mockScrollController = MockScrollController();
     mockScrollPosition = MockScrollPosition();
     mockTextEditingController = MockTextEditingController();
@@ -27,7 +26,7 @@ void main() {
       textEditingController: mockTextEditingController,
       datasource: mockApiDatasource,
       params: ParamsChatBot(
-        baseUrl: "example.com",
+        domain: "example.com",
         formatDataUtil: mockFormatDataUtil,
       ),
     );
@@ -38,14 +37,11 @@ void main() {
     when(mockTextEditingController.text).thenReturn('Hello');
     when(mockFormatDataUtil.getCurrentHour()).thenReturn('3:30 PM');
     when(mockApiDatasource.sendMessage(message: anyNamed('message')))
-        .thenAnswer((_) async => ChatMessageModel(choices: [
-              ChoiceModel(
-                  message: MessageModel(
-                      content: "Hi", role: "Error"))
-            ]));
+        .thenAnswer((_) async =>
+            MessageChat(created: '3:30 PM', content: "Hi", role: "Error"));
     await chatController.sendMessage();
     expect(chatController.messages.length, 2);
-    expect(chatController.messages.last.choices.first.message.content, 'Hi');
+    expect(chatController.messages.last.content, 'Hi');
     verify(mockTextEditingController.clear()).called(1);
   });
 
@@ -54,17 +50,15 @@ void main() {
     when(mockTextEditingController.text).thenReturn('Hello');
     when(mockFormatDataUtil.getCurrentHour()).thenReturn('3:30 PM');
     when(mockApiDatasource.sendMessage(message: anyNamed('message')))
-        .thenAnswer((_) async => ChatMessageModel(choices: [
-              ChoiceModel(
-                  message: MessageModel(
-                      content: "No Internet connection", role: "Error"))
-            ]));
+        .thenAnswer((_) async => MessageChat(
+            created: '3:30 PM',
+            content: "No Internet connection",
+            role: "Error"));
 
     await chatController.sendMessage();
 
     expect(chatController.messages.length, 2);
-    expect(chatController.messages.last.choices.first.message.content,
-        'No Internet connection');
+    expect(chatController.messages.last.content, 'No Internet connection');
   });
 
   test('sendMessage does nothing if message is empty', () async {
@@ -73,6 +67,6 @@ void main() {
     await chatController.sendMessage();
 
     expect(chatController.messages.isEmpty, true);
-    verifyNever(mockApiDatasource.sendMessage(message:anyNamed('message')));
+    verifyNever(mockApiDatasource.sendMessage(message: anyNamed('message')));
   });
 }

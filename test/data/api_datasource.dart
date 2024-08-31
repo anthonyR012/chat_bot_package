@@ -23,7 +23,7 @@ void main() {
     apiDatasource = ApiDatasourceImpl(
         apiKey: "API_KEY",
         params: ParamsChatBot(
-          baseUrl: "example.com",
+          domain: "example.com",
           maxToken: 150,
           modelGpt: "gpt-3.5-turbo",
           formatDataUtil: mockFormatDataUtil,
@@ -46,8 +46,8 @@ void main() {
         .thenAnswer((_) async => mockResponse);
     final chatmessage = await apiDatasource.sendMessage(message: "Hi bot");
 
-    expect(chatmessage.choices.first.message.content, "Hi");
-    expect(chatmessage.choices.first.message.role, 'bot');
+    expect(chatmessage.content, "Hi");
+    expect(chatmessage.role, 'bot');
   });
 
   test('sendMessage and get error', () async {
@@ -59,6 +59,6 @@ void main() {
 
     final message = await apiDatasource.sendMessage(message: "Hi bot");
 
-    expect(message.choices.first.message.content, 'No Internet connection');
+    expect(message.content, 'No Internet connection');
   });
 }

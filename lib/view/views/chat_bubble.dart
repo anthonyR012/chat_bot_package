@@ -2,7 +2,7 @@ import 'package:chat_bot/model/chat_model.dart';
 import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
-  final ChatMessageModel message;
+  final MessageChat message;
   final StyleReceivedByMe styleReceivedByMe;
   final StyleSentByMe styleSentByMe;
   final TextStyle? styleTextHour;
@@ -38,16 +38,14 @@ class ChatBubble extends StatelessWidget {
                     ? styleSentByMe.decoration ?? decorationDefault
                     : styleReceivedByMe.decoration ?? decorationDefault,
                 child: Text(
-                  message.choices.isEmpty
-                      ? "Something went wrong"
-                      : message.choices.first.message.content,
+                  message.content,
                   style: message.isSentByMe
                       ? styleSentByMe.styleMessage
                       : styleReceivedByMe.styleMessage,
                 )),
             const SizedBox(height: 4),
             Text(
-              message.created ?? "",
+              message.created,
               style: styleTextHour ??
                   TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),

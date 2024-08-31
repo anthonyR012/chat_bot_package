@@ -19,6 +19,6 @@ class MockScrollPosition extends Mock implements ScrollPosition {
   ScrollController,
   TextEditingController,
   FormatDataUtil,
-  ChatBotDatasource
+  ChatBotDatasource,
 ])
 void main() {}

@@ -24,7 +24,21 @@ class ChatInputField extends StatelessWidget {
               child: TextField(
             controller: controller,
             style: style.styleText,
-            decoration: style.inputDecoration,
+            decoration: style.inputDecoration ??
+                InputDecoration(
+                  label: Text(
+                    style.hintText ?? "Type a message...",
+                    style: style.hintTextStyle ??
+                        const TextStyle(color: Colors.grey, fontSize: 14.0),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                ),
+            focusNode: style.focusNode,
+            minLines: style.minLines,
+            maxLines: style.maxLines,
+            onSubmitted: (value) => onSend(),
           )),
           IconButton(
             icon: style.icon,
@@ -41,7 +55,12 @@ class ChatInputStyle {
   final TextStyle styleText;
   final ButtonStyle? styleIconButton;
   final InputDecoration? inputDecoration;
+  final FocusNode? focusNode;
   final Icon icon;
+  final int minLines;
+  final int maxLines;
+  final String? hintText;
+  final TextStyle? hintTextStyle;
 
   const ChatInputStyle(
       {this.styleText = const TextStyle(
@@ -49,7 +68,14 @@ class ChatInputStyle {
         color: Colors.black,
         fontWeight: FontWeight.normal,
       ),
+      this.hintText,
+      this.hintTextStyle,
+      this.minLines = 1,
+      this.maxLines = 5,
       this.icon = const Icon(Icons.send, color: Colors.black),
+      this.focusNode,
       this.inputDecoration,
       this.styleIconButton});
 }
+
+

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
 
 ChatMessageModel chatMessageModelFromJson(String str) =>
     ChatMessageModel.fromJson(json.decode(str));
@@ -8,40 +7,31 @@ ChatMessageModel chatMessageModelFromJson(String str) =>
 String chatMessageModelToJson(ChatMessageModel data) =>
     json.encode(data.toJson());
 
-class ChatMessageModel extends Equatable {
+class ChatMessageModel {
   final String? id;
-  final String? created;
+
   final String? model;
-  final bool isSentByMe;
   final List<ChoiceModel> choices;
 
   const ChatMessageModel({
     required this.choices,
     this.id,
     this.model,
-    this.created,
-    this.isSentByMe = false,
   });
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) =>
       ChatMessageModel(
         id: json["id"],
-        created: json["created_at"] ?? DateTime.now().hour.toString(),
         model: json["model"],
         choices: List<ChoiceModel>.from(
             json["choices"].map((x) => ChoiceModel.fromJson(x))),
       );
 
-  factory ChatMessageModel.empty() => const ChatMessageModel(
-      id: "",
-      created: "",
-      model: "",
-      choices: [],
-      isSentByMe: false);
+  factory ChatMessageModel.empty() =>
+      const ChatMessageModel(id: "", model: "", choices: []);
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "created": created,
         "model": model,
         "choices": List<dynamic>.from(choices.map((x) => x.toJson())),
       };
@@ -56,25 +46,14 @@ class ChatMessageModel extends Equatable {
   }) =>
       ChatMessageModel(
         id: id ?? this.id,
-        created: created ?? this.created,
         model: model ?? this.model,
         choices: choices ?? this.choices,
-        isSentByMe: isSentByMe ?? this.isSentByMe,
       );
-
-  @override
-  List<Object?> get props => [
-        id,
-        created,
-        model,
-        choices,
-        isSentByMe,
-      ];
 }
 
 class ChoiceModel {
   final int? index;
-  final MessageModel message;
+  final MessageChat message;
 
   ChoiceModel({
     this.index,
@@ -83,7 +62,7 @@ class ChoiceModel {
 
   factory ChoiceModel.fromJson(Map<String, dynamic> json) => ChoiceModel(
         index: json["index"],
-        message: MessageModel.fromJson(json["message"]),
+        message: MessageChat.fromJson(json["message"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -92,22 +71,41 @@ class ChoiceModel {
       };
 }
 
-class MessageModel {
+
+
+class MessageChat {
   final String role;
   final String content;
+  final bool isSentByMe;
+  final String created;
 
-  MessageModel({
+  MessageChat({
     required this.role,
-    required this.content
+    required this.content,
+    required this.created,
+    this.isSentByMe = false,
   });
 
-  factory MessageModel.fromJson(Map<String, dynamic> json) => MessageModel(
+  factory MessageChat.fromJson(Map<String, dynamic> json) => MessageChat(
         role: json["role"],
+        created: json["created"],
         content: json["content"],
+        isSentByMe: json["is_sent_by_me"] ?? false,
+      );
+
+  MessageChat copyWith(
+          {String? role, String? content, String? created, bool? isSentByMe}) =>
+      MessageChat(
+        role: role ?? this.role,
+        content: content ?? this.content,
+        created: created ?? this.created,
+        isSentByMe: isSentByMe ?? this.isSentByMe,
       );
 
   Map<String, dynamic> toJson() => {
         "role": role,
         "content": content,
+        "is_sent_by_me": isSentByMe,
+        "created": created
       };
 }
