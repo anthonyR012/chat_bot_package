@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 ChatMessageModel chatMessageModelFromJson(String str) =>
     ChatMessageModel.fromJson(json.decode(str));
 
@@ -70,8 +69,6 @@ class ChoiceModel {
         "message": message.toJson(),
       };
 }
-
-
 
 class MessageChat {
   final String role;

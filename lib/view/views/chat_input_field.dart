@@ -1,7 +1,11 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 
+/// A widget that displays a chat input field.
 class ChatTextField extends StatefulWidget {
+  /// required [onSend] callback when user sends a message
+  /// required [controller] for text input
+  /// required [focus] for text input
   const ChatTextField(
       {super.key,
       required this.onSend,
@@ -9,6 +13,8 @@ class ChatTextField extends StatefulWidget {
       required this.focus,
       ChatInputStyle? style})
       : style = style ?? const ChatInputStyle();
+
+  /// [onSend] callback when user sends a message
   final VoidCallback onSend;
   final TextEditingController controller;
   final FocusNode focus;
@@ -41,11 +47,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        _buildInputRow(),
-        if(_isEmojiVisible)
-         _buildEmojiPicker()
-      ],
+      children: [_buildInputRow(), if (_isEmojiVisible) _buildEmojiPicker()],
     );
   }
 
@@ -54,12 +56,14 @@ class _ChatTextFieldState extends State<ChatTextField> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 15),
       child: Row(
         children: [
-          IconButton(
-            icon: Icon(style.iconLending ?? Icons.emoji_emotions_outlined,
-                color:
-                    _isEmojiVisible ? style.activeColor : style.inactiveColor),
-            onPressed: _toggleEmojiPicker,
-          ),
+          if (style.enableLeandingIcon)
+            IconButton(
+              icon: Icon(style.iconLending ?? Icons.emoji_emotions_outlined,
+                  color: _isEmojiVisible
+                      ? style.activeColor
+                      : style.inactiveColor),
+              onPressed: _toggleEmojiPicker,
+            ),
           Expanded(
             child: TextField(
               controller: _controller,
@@ -88,27 +92,23 @@ class _ChatTextFieldState extends State<ChatTextField> {
   }
 
   Widget _buildEmojiPicker() {
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 1, end: 0),
-      duration: const Duration(milliseconds: 600),
-      builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(0, value * widget.style.height),
-          child: Opacity(
-            opacity: 1 - value,
-            child: child),
-        );
+    return EmojiPicker(
+      onEmojiSelected: (category, emoji) {
+        _controller.text += emoji.emoji;
       },
-      child: EmojiPicker(
-        onEmojiSelected: (category, emoji) {
-          _controller.text += emoji.emoji;
-        },
-        config: Config(
-          height: widget.style.height,
-          checkPlatformCompatibility: true,
-          swapCategoryAndBottomBar: false,
-        ),
-      ),
+      onBackspacePressed: () {
+        if (_controller.text.isNotEmpty) {
+          _controller.text =
+              _controller.text.substring(0, _controller.text.length - 1);
+        }
+      },
+      config: widget.style.configEmojiPicker ??
+          Config(
+            height: widget.style.height,
+            checkPlatformCompatibility: true,
+            bottomActionBarConfig: const BottomActionBarConfig(enabled: false),
+            swapCategoryAndBottomBar: false,
+          ),
     );
   }
 
@@ -149,6 +149,7 @@ class _SendButtonState extends State<_SendButton> {
         setState(() {
           isActive = true;
         });
+
         /// Stop typing and there is no text in textfield
       } else if (widget.textController.text.isEmpty && isActive) {
         setState(() {
@@ -171,24 +172,41 @@ class _SendButtonState extends State<_SendButton> {
   }
 }
 
+/// Define style of ChatInputField
 class ChatInputStyle {
+  /// Define style of textfield input
   final TextStyle styleText;
+
+  /// Define style of send button
   final ButtonStyle? styleIconButton;
+
+  /// You can define style of textfield input
   final InputDecoration? inputDecoration;
   final FocusNode? focusNode;
+
+  /// For default it will be used [Icon(Icons.send)]
   final IconData? iconTrailing;
+
+  /// For default it will be used [Icon(Icons.emoji_emotions_outlined)]
   final IconData? iconLending;
+  final bool enableLeandingIcon;
+
   /// Define min and max lines of textfield input main
   final int minLines;
   final int maxLines;
+
   /// [hintText] and [hintTextStyle] are optional
   /// for default textfield input will be used "Start typing..."
   final String? hintText;
   final TextStyle? hintTextStyle;
   final Color activeColor;
   final Color inactiveColor;
+
   /// [height] of the emoji picker container
   final double height;
+
+  /// [Config] of the emoji picker
+  final Config? configEmojiPicker;
 
   const ChatInputStyle(
       {this.styleText = const TextStyle(
@@ -196,7 +214,9 @@ class ChatInputStyle {
         color: Colors.black,
         fontWeight: FontWeight.normal,
       ),
+      this.enableLeandingIcon = true,
       this.height = 256,
+      this.configEmojiPicker,
       this.activeColor = Colors.blue,
       this.inactiveColor = Colors.grey,
       this.hintText,

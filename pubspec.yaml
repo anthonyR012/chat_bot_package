@@ -1,6 +1,6 @@
 name: chat_bot
 description: "A customizable chatbot built on OpenAI's GPT API, enabling personalized conversational experiences."
-version: 1.0.2
+version: 1.1.1
 
 repository: https://github.com/anthonyR012/chat_bot_package 
 

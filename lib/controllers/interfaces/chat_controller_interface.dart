@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 
 abstract class ChatControllerInterface<ModelMessage> extends ChangeNotifier {
-
   List<ModelMessage> get messages;
   ScrollController get scrollController;
   bool get isLoading;
@@ -17,5 +15,4 @@ abstract class ChatControllerInterface<ModelMessage> extends ChangeNotifier {
       curve: Curves.easeOut,
     );
   }
-
 }

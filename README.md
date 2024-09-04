@@ -10,13 +10,13 @@ A Flutter package for integrating a customizable chatbot powered by OpenAI's GPT
 - Dynamic configuration options such as model, messages, and token limits.
 - Allowing Users to Customize Message Sending Functionality
 
-# Installation
+## Installation
 ```sh
 dependencies:
-  your_chatbot_package: ^1.0.3
+  your_chatbot_package: ^1.1.0
 ```
 
-# Usage
+## Usage
 ChatBot provides an easy way to implement the ChatGPT API, allowing you to focus on more important matters.
 To get started, create a `ChatController` instance and provide it with the API key.
 
@@ -36,7 +36,7 @@ ChatBot(
 ```
 And that's all!
 
-# Custom Configuration
+## Custom Configuration
 Customize your ChatGptModel and other properties.
 
 ```sh
@@ -60,7 +60,7 @@ ChatBot(
 ),
 ```
 
-# Using Your Own API Service
+## Using Your Own API Service
 In case you wish to use your own implementation, you can easily override the API data source.
 
 ```sh
@@ -85,15 +85,15 @@ class SendMessageImplementation extends ChatBotDatasource {
 ```
 
 
-# License
+## License
 
 This project is licensed under the GNU License. See the LICENSE file for details.
 
-# Contributing
+## Contributing
 
 Contributions are welcome! Please submit a pull request or open an issue to discuss improvements or report bugs.
 
-# Acknowledgments
+## Acknowledgments
 
 Thanks to OpenAI for providing the GPT API.
 Special thanks to the Flutter community for their ongoing support.

@@ -6,6 +6,9 @@ import 'package:chat_bot/util/format_data_util.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
+// The ChatController class manages the chat messages, interactions with the API, and controls
+// UI elements like focus, text input, and scroll position. It ensures that messages are sent
+// correctly and handles errors.
 class ChatController extends ChatControllerInterface<MessageChat> {
   final List<MessageChat> _messages = [];
   final ChatBotDatasource _apiDatasource;
@@ -52,12 +55,34 @@ class ChatController extends ChatControllerInterface<MessageChat> {
   Future<void> sendMessage([String? messageDefault]) async {
     try {
       String message = messageDefault ?? textEditingController.text;
+      assert(message.isNotEmpty, "Message cannot be empty");
       if (message.isEmpty) return;
       messages.add(MessageChat(
           content: message,
           isSentByMe: true,
           created: _params.formatDataUtil.getCurrentHour(),
           role: "user"));
+      textEditingController.clear();
+      isLoading = true;
+      notifyListeners();
+      scrollToEnd();
+      final responseMessage =
+          await _apiDatasource.sendMessage(message: message);
+      messages.add(responseMessage);
+    } catch (e) {
+      _handleUnexpectedError('Unexpected error occurred: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+      Future.delayed(Durations.medium4, scrollToEnd);
+    }
+  }
+
+  /// Sends a message anonymously which does not appear in the chat history
+  Future<void> sendAnonymously({required String message}) async {
+    try {
+      assert(message.isNotEmpty, "Message cannot be empty");
+      if (message.isEmpty) return;
       textEditingController.clear();
       isLoading = true;
       notifyListeners();
@@ -81,8 +106,6 @@ class ChatController extends ChatControllerInterface<MessageChat> {
         role: "Error");
     _messages.add(chatMessage);
   }
-  
-
 }
 
 class ParamsChatBot {

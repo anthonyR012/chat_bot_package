@@ -5,7 +5,7 @@ import 'package:chat_bot/view/chat_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(UsingMyChatBotExample());
+  runApp(MyOwnImplementationExample());
 }
 
 class UsingMyChatBotExample extends StatelessWidget {
@@ -35,7 +35,6 @@ class UsingMyChatBotExample extends StatelessWidget {
   }
 }
 
-
 class MyOwnImplementationExample extends StatelessWidget {
   MyOwnImplementationExample({super.key});
 
@@ -53,7 +52,7 @@ class MyOwnImplementationExample extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: const Text("My Support chat"),
-           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         ),
         body: ChatBot(
           chatController: chatController,

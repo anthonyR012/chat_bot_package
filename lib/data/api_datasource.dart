@@ -6,10 +6,14 @@ import 'package:chat_bot/controllers/chat_controller.dart';
 import 'package:chat_bot/model/chat_model.dart';
 import 'package:http/http.dart' as http;
 
+// Base class for chat bot
 abstract class ChatBotDatasource {
   Future<MessageChat> sendMessage({required String message});
 }
- 
+
+/// Default implementation for chat bot
+/// [ChatBotDatasource] can be overridden by your own implementation
+/// Use: [class MyOverrideDatasource extends ChatBotDatasource] or [class MyOverrideDatasource implements ChatBotDatasource]
 class ApiDatasourceImpl implements ChatBotDatasource {
   final http.Client _http;
   final String _apiKey;
