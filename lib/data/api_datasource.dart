@@ -6,8 +6,9 @@ import 'package:chat_bot/controllers/chat_controller.dart';
 import 'package:chat_bot/model/chat_model.dart';
 import 'package:http/http.dart' as http;
 
-// Base class for chat bot
+/// Base class for chat bot
 abstract class ChatBotDatasource {
+  /// Send a message to the chat bot
   Future<MessageChat> sendMessage({required String message});
 }
 

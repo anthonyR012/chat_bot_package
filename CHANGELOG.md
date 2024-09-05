@@ -12,3 +12,7 @@
 * Allow send anonymously messages
 * Enhace documentation
 * Allow cusotmize type indicator
+
+## 1.2.1
+* Patch scroll controller exception
+* Add images to README

@@ -2,6 +2,8 @@
 
 A Flutter package for integrating a customizable chatbot powered by OpenAI's GPT API. This package allows you to create personalized conversational experiences by configuring various settings or using the default GPT-3.5-turbo model.
 
+![MyChatBot](https://rubio.ink/assets/img/work/workchatgpt.png)
+
 ## Features
 
 - Customizable API Integration with OpenAI GPT.

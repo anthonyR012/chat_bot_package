@@ -86,7 +86,6 @@ class ChatController extends ChatControllerInterface<MessageChat> {
       textEditingController.clear();
       isLoading = true;
       notifyListeners();
-      scrollToEnd();
       final responseMessage =
           await _apiDatasource.sendMessage(message: message);
       messages.add(responseMessage);
@@ -95,7 +94,6 @@ class ChatController extends ChatControllerInterface<MessageChat> {
     } finally {
       isLoading = false;
       notifyListeners();
-      Future.delayed(Durations.medium4, scrollToEnd);
     }
   }
 

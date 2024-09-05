@@ -13,6 +13,7 @@ class UsingMyChatBotExample extends StatelessWidget {
   final ChatController chatController = ChatController(
       apiKey:
           "YOUR_API_KEY_HERE"); //replace YOUR_API_KEY_HERE with your own API key
+  
 
   @override
   Widget build(BuildContext context) {
