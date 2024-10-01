@@ -6,9 +6,9 @@ import 'package:chat_bot/util/format_data_util.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-// The ChatController class manages the chat messages, interactions with the API, and controls
-// UI elements like focus, text input, and scroll position. It ensures that messages are sent
-// correctly and handles errors.
+/// The ChatController class manages the chat messages, interactions with the API, and controls
+/// UI elements like focus, text input, and scroll position. It ensures that messages are sent
+/// correctly and handles errors.
 class ChatController extends ChatControllerInterface<MessageChat> {
   final List<MessageChat> _messages = [];
   final ChatBotDatasource _apiDatasource;
@@ -24,7 +24,7 @@ class ChatController extends ChatControllerInterface<MessageChat> {
 
   @override
   bool isLoading = false;
-
+  /// Interface default implementation for chat bot
   ChatController({
     http.Client? httpClient,
     TextEditingController? textEditingController,
@@ -104,15 +104,22 @@ class ChatController extends ChatControllerInterface<MessageChat> {
         role: "Error");
     _messages.add(chatMessage);
   }
+  
+  @override
+  set messages(List<MessageChat> messages) {
+    messages  = messages;
+    notifyListeners();
+  }
 }
 
+/// Main configuration for chat bot
 class ParamsChatBot {
   final String domain;
   final String endPoint;
   final String modelGpt;
   final int maxToken;
   final FormatDataUtil formatDataUtil;
-
+  
   const ParamsChatBot({
     this.domain = "api.openai.com",
     this.endPoint = "/v1/chat/completions",

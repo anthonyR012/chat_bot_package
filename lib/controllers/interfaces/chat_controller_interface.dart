@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 abstract class ChatControllerInterface<ModelMessage> extends ChangeNotifier {
   List<ModelMessage> get messages;
+  set messages(List<ModelMessage> messages);
   ScrollController get scrollController;
   bool get isLoading;
   TextEditingController get textEditingController;
