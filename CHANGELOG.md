@@ -16,3 +16,6 @@
 ## 1.2.1
 * Patch scroll controller exception
 * Add images to README
+
+## 1.2.2
+* Allow set messages by controller
