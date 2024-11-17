@@ -19,3 +19,6 @@
 
 ## 1.2.2
 * Allow set messages by controller
+
+## 1.3.2
+* Upgrade emojiPicker package

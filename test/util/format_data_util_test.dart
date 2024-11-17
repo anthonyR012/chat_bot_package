@@ -8,14 +8,14 @@ void main() {
 }
 
 void handlesMidnightCorrectly() {
-  final formatDataUtil = FormatDataUtil();
+  const formatDataUtil = FormatDataUtil();
   final now = DateTime(2023, 10, 5, 0, 0);
   final result = formatDataUtil.getCurrentHour(now: now);
   expect(result, "12:00 AM");
 }
 
 void returnsCorrect12hourFormatWithAmPm() {
-  final formatDataUtil = FormatDataUtil();
+  const formatDataUtil = FormatDataUtil();
   final now = DateTime(2023, 10, 5, 15, 30);
   final result = formatDataUtil.getCurrentHour(now: now);
   expect(result, "3:30 PM");

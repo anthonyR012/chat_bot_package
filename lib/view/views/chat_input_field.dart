@@ -107,7 +107,6 @@ class _ChatTextFieldState extends State<ChatTextField> {
             height: widget.style.height,
             checkPlatformCompatibility: true,
             bottomActionBarConfig: const BottomActionBarConfig(enabled: false),
-            swapCategoryAndBottomBar: false,
           ),
     );
   }
